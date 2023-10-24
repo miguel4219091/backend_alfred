@@ -1,6 +1,7 @@
 import express from 'express';
 import mysql from 'mysql';
 
+require('dotenv').config();
 const app = express();
 
 // middleware
@@ -15,6 +16,8 @@ const connection = mysql.createConnection({
   database: process.env.DB_DATABASE
 });
 
+console.log({PORT: process.env.DB_HOST})
+
 // Connect to MySQL database
 connection.connect((err) => {
   if (err) {
@@ -27,19 +30,19 @@ connection.connect((err) => {
 // API endpoint for ping
 app.get('/ping', (_req, res) => {
   // Perform a simple query to the MySQL database
-  connection.query('SELECT * from users', (err, rows) => {
+  connection.query('SELECT user_id FROM users limit 0, 500', (err, rows) => {
     if (err) {
       console.error('Error executing MySQL query:', err);
       res.status(500).send('Internal Server Error');
     } else {
-      const result = rows[0].result;
-      res.send(`Ping successful. Result: ${result}`);
+      const result = rows[0];
+      res.send(`Ping successful. Result userId:${result.user_id}`);
     }
   });
 });
 
 // Start the server
-const port = 5000;
+const port = 3000;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

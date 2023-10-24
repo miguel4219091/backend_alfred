@@ -16,6 +16,7 @@ const connection = mysql_1.default.createConnection({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE
 });
+console.log({ PORT: process.env.DB_HOST });
 // Connect to MySQL database
 connection.connect((err) => {
     if (err) {
@@ -40,7 +41,7 @@ app.get('/ping', (_req, res) => {
     });
 });
 // Start the server
-const port = 5000;
+const port = 3000;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
