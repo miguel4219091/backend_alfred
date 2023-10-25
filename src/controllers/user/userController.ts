@@ -63,16 +63,14 @@ class UserController {
         console.log({validate_phone: validate_phone.length})
 
         if (validate_email.length > 0) {
-            res.status(400).json({
+            return res.status(400).json({
                 code: 400,
                 status: true,
                 message: 'Correo existente',
                 data: null
             });
-        }
-
-        if (validate_phone.length > 0) {
-            res.status(400).json({
+        }else if (validate_phone.length > 0) {
+            return res.status(400).json({
                 code: 400,
                 status: true,
                 message: 'Teleofno existente',
@@ -173,7 +171,7 @@ class UserController {
 
         await executeQuery(sqlUserSellerFee); 
 
-        res.json({
+        return res.json({
             code: 400,
             status: true,
             message: 'Registro Exitoso',
