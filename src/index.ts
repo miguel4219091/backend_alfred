@@ -1,48 +1,57 @@
-import express from 'express';
-import mysql from 'mysql';
+import express, { application } from 'express';
+import morgan from "morgan";
+import cors from "cors";
 
 require('dotenv').config();
-const app = express();
+import connection from "./config/db";
 
-// middleware
-app.use(express.json());
+// routes
+import userRoter from "./routes/user";
+import accountRoter from "./routes/account";
 
-// MySQL connection configuration
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT), // Convert the port to a number
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE
-});
+class Server {
+  public app = application
 
-console.log({PORT: process.env.DB_HOST})
-
-// Connect to MySQL database
-connection.connect((err) => {
-  if (err) {
-    console.error('Error connecting to MySQL database:', err);
-  } else {
-    console.log('Connected to MySQL database');
+  constructor(){
+    this.app = express();
+    this.config();
+    this.routes();
   }
-});
 
-// API endpoint for ping
-app.get('/ping', (_req, res) => {
-  // Perform a simple query to the MySQL database
-  connection.query('SELECT user_id FROM users limit 0, 500', (err, rows) => {
-    if (err) {
-      console.error('Error executing MySQL query:', err);
-      res.status(500).send('Internal Server Error');
-    } else {
-      const result = rows[0];
-      res.send(`Ping successful. Result userId:${result.user_id}`);
-    }
-  });
-});
+  config(): void{
+    this.app.set('port', process.env.PORT || 3000);
+    this.app.use(morgan('dev'));
+    this.app.use(cors());
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({extended: false}));
+  }
 
-// Start the server
-const port = 3000;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+  routes():void{
+    this.app.use('/user', userRoter);
+    this.app.use('/account', accountRoter);
+    
+    this.app.get('/ping', (_req, res) => {
+      // Perform a simple query to the MySQL database
+      connection.query('SELECT user_id FROM users limit 0, 500', (err, rows) => {
+        if (err) {
+          console.error('Error executing MySQL query:', err);
+          res.status(500).send('Internal Server Error');
+        } else {
+          const result = rows[0];
+          res.send(`Ping successful. Result userId:${result.user_id}`);
+        }
+      });
+    });
+  }
+
+  start():void{
+    if (!connection) throw 'No ahi conexion con la BD'
+      
+    this.app.listen(this.app.get('port'), () => {
+      console.log(`Server is running on port ${this.app.get('port')}`);
+    });
+  }
+}
+
+const server = new Server();
+server.start()

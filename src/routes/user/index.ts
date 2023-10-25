@@ -1,10 +1,19 @@
-import express from "express";
+import { Router } from "express";
+import { userController } from "../../controllers/user/userController";
 
-const router = express.Router()
+class UserRouter{
+    public router: Router = Router();
 
+    constructor(){
+        this.config();
+    }
 
-router.get('/', (_req, res)=> {
-    res.send('user')
-})
+    config(){
+        this.router.post('/register', userController.register)
+        this.router.get('/', userController.index)
+    }
+}
 
-export default router
+const userRouter =new UserRouter()
+export default userRouter.router;
+

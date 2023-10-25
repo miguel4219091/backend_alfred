@@ -1,47 +1,77 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const mysql_1 = __importDefault(require("mysql"));
-const app = (0, express_1.default)();
-// middleware
-app.use(express_1.default.json());
-// MySQL connection configuration
-const connection = mysql_1.default.createConnection({
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE
-});
-console.log({ PORT: process.env.DB_HOST });
-// Connect to MySQL database
-connection.connect((err) => {
-    if (err) {
-        console.error('Error connecting to MySQL database:', err);
+const express_1 = __importStar(require("express"));
+const morgan_1 = __importDefault(require("morgan"));
+const cors_1 = __importDefault(require("cors"));
+require('dotenv').config();
+const db_1 = __importDefault(require("./config/db"));
+// routes
+const user_1 = __importDefault(require("./routes/user"));
+const account_1 = __importDefault(require("./routes/account"));
+class Server {
+    constructor() {
+        this.app = express_1.application;
+        this.app = (0, express_1.default)();
+        this.config();
+        this.routes();
     }
-    else {
-        console.log('Connected to MySQL database');
+    config() {
+        this.app.set('port', process.env.PORT || 3000);
+        this.app.use((0, morgan_1.default)('dev'));
+        this.app.use((0, cors_1.default)());
+        this.app.use(express_1.default.json());
+        this.app.use(express_1.default.urlencoded({ extended: false }));
     }
-});
-// API endpoint for ping
-app.get('/ping', (_req, res) => {
-    // Perform a simple query to the MySQL database
-    connection.query('SELECT * from users', (err, rows) => {
-        if (err) {
-            console.error('Error executing MySQL query:', err);
-            res.status(500).send('Internal Server Error');
-        }
-        else {
-            const result = rows[0].result;
-            res.send(`Ping successful. Result: ${result}`);
-        }
-    });
-});
-// Start the server
-const port = 3000;
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+    routes() {
+        this.app.use('/user', user_1.default);
+        this.app.use('/account', account_1.default);
+        this.app.get('/ping', (_req, res) => {
+            // Perform a simple query to the MySQL database
+            db_1.default.query('SELECT user_id FROM users limit 0, 500', (err, rows) => {
+                if (err) {
+                    console.error('Error executing MySQL query:', err);
+                    res.status(500).send('Internal Server Error');
+                }
+                else {
+                    const result = rows[0];
+                    res.send(`Ping successful. Result userId:${result.user_id}`);
+                }
+            });
+        });
+    }
+    start() {
+        if (!db_1.default)
+            throw 'No ahi conexion con la BD';
+        this.app.listen(this.app.get('port'), () => {
+            console.log(`Server is running on port ${this.app.get('port')}`);
+        });
+    }
+}
+const server = new Server();
+server.start();
