@@ -63,7 +63,7 @@ class UserController {
         console.log({validate_phone: validate_phone.length})
 
         if (validate_email.length > 0) {
-            res.json({
+            res.status(400).json({
                 code: 400,
                 status: true,
                 message: 'Correo existente',
@@ -72,10 +72,10 @@ class UserController {
         }
 
         if (validate_phone.length > 0) {
-            res.json({
+            res.status(400).json({
                 code: 400,
                 status: true,
-                message: 'Telefono existente',
+                message: 'Teleofno existente',
                 data: null
             });
         }
