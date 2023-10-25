@@ -20,6 +20,7 @@
     "@types/mysql": "2.15.23",
     "@types/node": "20.8.8",
     "@types/pbkdf2": "3.1.1",
+    "@types/uuid": "9.0.6",
     "ts-node-dev": "2.0.0",
     "typescript": "5.2.2"
   },
@@ -30,6 +31,7 @@
     "express": "4.18.2",
     "morgan": "1.10.0",
     "mysql": "2.18.1",
-    "pbkdf2": "3.1.2"
+    "pbkdf2": "3.1.2",
+    "uuid": "9.0.1"
   }
 }
