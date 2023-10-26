@@ -24,13 +24,19 @@ class UserController {
         try {
             const userData = await executeQuery(`SELECT * FROM users WHERE user_id = ${id}`);
             res.json({
-                code: 400,
+                code: 200,
                 status: true,
+                message: 'Consulta Exitosa',
                 data: userData
             });   
         } catch (error) {
         console.error('Error executing MySQL query:', error);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({
+            code: 500,
+            status: false,
+            message: 'Internal Server Error',
+            data: null
+        });
         }
     }
     
@@ -63,15 +69,15 @@ class UserController {
         console.log({validate_phone: validate_phone.length})
 
         if (validate_email.length > 0) {
-            return res.status(400).json({
-                code: 400,
+            return res.status(402).json({
+                code: 402,
                 status: true,
                 message: 'Correo existente',
                 data: null
             });
         }else if (validate_phone.length > 0) {
-            return res.status(400).json({
-                code: 400,
+            return res.status(402).json({
+                code: 402,
                 status: true,
                 message: 'Teleofno existente',
                 data: null
@@ -172,7 +178,7 @@ class UserController {
         await executeQuery(sqlUserSellerFee); 
 
         return res.json({
-            code: 400,
+            code: 200,
             status: true,
             message: 'Registro Exitoso',
             data: {

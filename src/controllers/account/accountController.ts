@@ -2,6 +2,21 @@ import { Request, Response } from "express";
 // import accountServices from "../../services/account";
 import connection from "../../config/db";
 
+
+function executeQuery(query: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      connection.query(query, (err: any, rows: any) => {
+        if (err) {
+          console.error('Error executing MySQL query:', err);
+          reject(err);
+        } else {
+          resolve(rows);
+        }
+      });
+    });
+}
+
+
 class AccountController {
     // private accountSrv: any;
 
@@ -12,42 +27,39 @@ class AccountController {
     public async account (req: Request, res: Response) {
         const cvu = req.body.cvu
 
-        connection.query(`SELECT * FROM cvu_accounts where cvu = ${cvu}`,  (err, rows) => {
-            if (err) {
-              console.error('Error executing MySQL query:', err);
-              res.status(500).send('Internal Server Error');
-            } else {
-              const result = rows[0];
-              res.json({
-                code: 400,
-                status: true,
-                data: result
-              });
-            }
-        }); 
+        const accountData = await executeQuery(`SELECT * FROM cvu_accounts where cvu = ${cvu}`);
+        
+        return res.json({
+            code: 200,
+            status: true,
+            message: 'Consulta Exitosa',
+            data: accountData
+        });  
+       
     }
     
-    public transaction (req: Request, res: Response) {
-        const cvu = req.body.cvu
+    public async transaction (req: Request, res: Response) {
+        const id = req.body.id
 
-        connection.query(`
-            SELECT t.*
-            FROM cvu_account_transactions AS t
-            JOIN cvu_accounts AS a ON t.cvu_account_id = a.cvu_account_id
-            WHERE a.cvu = ${cvu} order by cvu_account_transaction_id desc
-            `, (err, rows) => {
-            if (err) {
-                console.error('Error executing MySQL query:', err);
-                res.status(500).send('Internal Server Error');
-            } else {
-                const result = rows;
-                res.json({
-                code: 400,
-                status: true,
-                data: result
-                });
-            }
-        });
+        if(!id) {
+            return res.status(500).json({
+                code: 500,
+                status: false,
+                message: 'ID Inexistente',
+                data: null
+              });
+        }
+
+        const accountData = await executeQuery(`SELECT a.amount,b.transaction_type, a.transaction_datetime FROM transactions b, 
+            cvu_account_transactions a 
+            where b.account_transaction_id = a.cvu_account_transaction_id and b.user_id = ${id} order by 3 desc`);
+
+        return res.json({
+            code: 200,
+            status: true,
+            message: 'Consulta Exitosa',
+            data: accountData
+        });  
         
     }
 
