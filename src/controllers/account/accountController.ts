@@ -39,20 +39,20 @@ class AccountController {
     }
     
     public async transaction (req: Request, res: Response) {
-        const id = req.body.id
+        const cvu = req.body.cvu
 
-        if(!id) {
+        if(!cvu) {
             return res.status(500).json({
                 code: 500,
                 status: false,
-                message: 'ID Inexistente',
+                message: 'CVU Inexistente',
                 data: null
               });
         }
 
         const accountData = await executeQuery(`SELECT a.amount,b.transaction_type, a.transaction_datetime FROM transactions b, 
             cvu_account_transactions a 
-            where b.account_transaction_id = a.cvu_account_transaction_id and b.user_id = ${id} order by 3 desc`);
+            where b.account_transaction_id = a.cvu_account_transaction_id and b.user_id = 3319 order by 3 desc`);
 
         return res.json({
             code: 200,
