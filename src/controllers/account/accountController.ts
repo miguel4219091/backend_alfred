@@ -27,7 +27,7 @@ class AccountController {
     public async account (req: Request, res: Response) {
         const cvu = req.body.cvu
 
-        const accountData = await executeQuery(`SELECT * FROM cvu_accounts where cvu = ${cvu}`);
+        const accountData = await executeQuery(`SELECT * FROM cvu_accounts where cvu = '${cvu}'`);
         
         return res.json({
             code: 200,
