@@ -31,6 +31,7 @@ const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 require('dotenv').config();
 const db_1 = __importDefault(require("./config/db"));
+const db_alfred_1 = __importDefault(require("./config/db_alfred"));
 // routes
 const user_1 = __importDefault(require("./routes/user"));
 const account_1 = __importDefault(require("./routes/account"));
@@ -68,6 +69,8 @@ class Server {
     start() {
         if (!db_1.default)
             throw 'No ahi conexion con la BD';
+        if (!db_alfred_1.default)
+            throw 'No ahi conexion con la BD alfred';
         this.app.listen(this.app.get('port'), () => {
             console.log(`Server is running on port ${this.app.get('port')}`);
         });

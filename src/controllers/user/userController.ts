@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { v4 as uuidv4 } from 'uuid';
-import connection from "../../config/db";
+import connection_alfred from "../../config/db_alfred";
 
 function executeQuery(query: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      connection.query(query, (err: any, rows: any) => {
+      connection_alfred.query(query, (err: any, rows: any) => {
         if (err) {
           console.error('Error executing MySQL query:', err);
           reject(err);

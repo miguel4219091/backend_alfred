@@ -4,6 +4,7 @@ import cors from "cors";
 
 require('dotenv').config();
 import connection from "./config/db";
+import connection_alfred from "./config/db_alfred";
 
 // routes
 import userRoter from "./routes/user";
@@ -46,6 +47,7 @@ class Server {
 
   start():void{
     if (!connection) throw 'No ahi conexion con la BD'
+    if (!connection_alfred) throw 'No ahi conexion con la BD alfred'
       
     this.app.listen(this.app.get('port'), () => {
       console.log(`Server is running on port ${this.app.get('port')}`);
