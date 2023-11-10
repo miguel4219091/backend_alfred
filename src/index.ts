@@ -9,6 +9,7 @@ import connection_alfred from "./config/db_alfred";
 // routes
 import userRoter from "./routes/user";
 import accountRoter from "./routes/account";
+import transactionRoter from "./routes/transaction";
 
 class Server {
   public app = application
@@ -30,6 +31,7 @@ class Server {
   routes():void{
     this.app.use('/user', userRoter);
     this.app.use('/account', accountRoter);
+    this.app.use('/transaction', transactionRoter);
     
     this.app.get('/ping', (_req, res) => {
       // Perform a simple query to the MySQL database

@@ -20,7 +20,7 @@ class UserController {
         const id = req.query.id as string;
 
         try {
-            const userData = await executeQuery(`SELECT * FROM users WHERE user_id = ${id}`);
+            const userData = await executeQuery(`SELECT * FROM transaction WHERE user_id = ${id}`);
             res.json({
                 code: 200,
                 status: true,
@@ -82,7 +82,7 @@ class UserController {
         }
 
         // validate cuit
-        const validate_ciut = /^\d{2}-\d{8}-\d{1}$/;
+        const validate_ciut = /^\d{11}$/;
         if (!validate_ciut.test(cuit)) {
             return res.status(402).json({
                 code: 402,

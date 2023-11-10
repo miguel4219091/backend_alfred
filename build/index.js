@@ -35,6 +35,7 @@ const db_alfred_1 = __importDefault(require("./config/db_alfred"));
 // routes
 const user_1 = __importDefault(require("./routes/user"));
 const account_1 = __importDefault(require("./routes/account"));
+const transaction_1 = __importDefault(require("./routes/transaction"));
 class Server {
     constructor() {
         this.app = express_1.application;
@@ -52,6 +53,7 @@ class Server {
     routes() {
         this.app.use('/user', user_1.default);
         this.app.use('/account', account_1.default);
+        this.app.use('/transaction', transaction_1.default);
         this.app.get('/ping', (_req, res) => {
             // Perform a simple query to the MySQL database
             db_1.default.query('SELECT user_id FROM users limit 0, 500', (err, rows) => {

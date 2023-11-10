@@ -25,6 +25,7 @@
     "typescript": "5.2.2"
   },
   "dependencies": {
+    "class-validator": "^0.14.0",
     "cors": "2.8.5",
     "csprng": "0.1.2",
     "dotenv": "^16.3.1",
