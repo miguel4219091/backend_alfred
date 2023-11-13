@@ -32,7 +32,7 @@ class AccountController {
         return res.json({
             code: 200,
             status: true,
-            message: 'Consulta Exitosa',
+            message: 'Successful Consultation',
             data: accountData
         });  
        
@@ -45,7 +45,7 @@ class AccountController {
             return res.status(500).json({
                 code: 500,
                 status: false,
-                message: 'CVU Inexistente',
+                message: 'Non-existent CVU',
                 data: null
               });
         }
@@ -57,7 +57,7 @@ class AccountController {
         return res.json({
             code: 200,
             status: true,
-            message: 'Consulta Exitosa',
+            message: 'Successful Consultation',
             data: accountData
         });  
         

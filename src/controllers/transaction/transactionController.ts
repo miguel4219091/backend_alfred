@@ -36,7 +36,7 @@ class TransactionController {
             res.json({
                 code: 200,
                 status: true,
-                message: 'Consulta Exitosa',
+                message: 'Successful Consultation',
                 data: userData
             });   
         } catch (error) {
@@ -76,6 +76,7 @@ class TransactionController {
         const transacctionId = req.body.transacctionId;
         const bankId = req.body.bankId;
         const idTransactionProcess = req.body.idTransactionProcess;
+        const cvu = req.body.cvu;
 
 
         const dataTransaction = {
@@ -103,7 +104,8 @@ class TransactionController {
             pinId: pinId,
             transacctionId: transacctionId,
             bankId: bankId,
-            idTransactionProcess: idTransactionProcess
+            idTransactionProcess: idTransactionProcess,
+            cvu: cvu
           };
           console.log({dataTransaction})
 
@@ -113,7 +115,7 @@ class TransactionController {
             return res.status(402).json({
                 code: 200,
                 status: true,
-                message: 'Ya existe transaccion con ese id',
+                message: 'There is already a transaction with that id',
                 data: null
             });
         }
@@ -124,7 +126,7 @@ class TransactionController {
             return res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Registro Exitoso',
+                message: 'Successful registration',
                 data: {
                     transaction_id: result.insertId
                 }
@@ -133,7 +135,7 @@ class TransactionController {
             return res.status(403).json({
                 code: 403,
                 status: true,
-                message: 'Falla al cargar el registro',
+                message: 'Failure to load log',
                 data: null
             });
         }

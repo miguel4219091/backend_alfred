@@ -24,7 +24,7 @@ class UserController {
             res.json({
                 code: 200,
                 status: true,
-                message: 'Consulta Exitosa',
+                message: 'Successful Consultation',
                 data: userData
             });   
         } catch (error) {
@@ -66,7 +66,7 @@ class UserController {
             return res.status(402).json({
                 code: 402,
                 status: true,
-                message: 'Correo existente.',
+                message: 'Existing email.',
                 data: null
             });
         }
@@ -76,7 +76,7 @@ class UserController {
             return res.status(402).json({
                 code: 402,
                 status: true,
-                message: 'Telefono existente.',
+                message: 'Existing telephone.',
                 data: null
             });
         }
@@ -87,7 +87,7 @@ class UserController {
             return res.status(402).json({
                 code: 402,
                 status: true,
-                message: 'Cuit Invalido.',
+                message: 'Invalid Cuit.',
                 data: null
             });
         }
@@ -98,7 +98,7 @@ class UserController {
             return res.status(402).json({
                 code: 402,
                 status: true,
-                message: 'Formato CVU Invalido.',
+                message: 'Invalid CVU format.',
                 data: null
             });
         }
@@ -145,7 +145,7 @@ class UserController {
             return res.status(200).json({
                 code: 200,
                 status: true,
-                message: 'Registro Exitoso',
+                message: 'Successful registration',
                 data: {
                     user_id: result.insertId
                 }
@@ -154,7 +154,7 @@ class UserController {
             return res.status(403).json({
                 code: 403,
                 status: true,
-                message: 'Falla al cargar el registro',
+                message: 'Failure to load log',
                 data: {
                     user_id: result.insertId
                 }
