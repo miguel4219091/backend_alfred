@@ -4,7 +4,8 @@
  "description": "",
  "main": "index.js",
  "scripts": {
-  "tsc": "tsc -w",
+  "tsc:watch": "tsc -w",
+  "tsc": "tsc",
   "dev": "ts-node-dev src/index.ts",
   "start": "node build/index.js",
   "test": "echo \"Error: no test specified\" && exit 1"
