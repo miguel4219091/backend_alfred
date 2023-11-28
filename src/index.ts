@@ -5,6 +5,7 @@ import cors from "cors";
 require('dotenv').config();
 import connection from "./config/db";
 import connection_alfred from "./config/db_alfred";
+import { scheduleCronJobsTransacctions } from './schedule/schedule';
 
 // routes
 import userRoter from "./routes/user";
@@ -18,6 +19,7 @@ class Server {
     this.app = express();
     this.config();
     this.routes();
+    this.scheduleCronJobs();
   }
 
   config(): void{
@@ -45,6 +47,10 @@ class Server {
         }
       });
     });
+  }
+
+  scheduleCronJobs(): void {
+    scheduleCronJobsTransacctions()
   }
 
   start():void{

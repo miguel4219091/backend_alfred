@@ -28,6 +28,7 @@ const cors_1 = __importDefault(require("cors"));
 require('dotenv').config();
 const db_1 = __importDefault(require("./config/db"));
 const db_alfred_1 = __importDefault(require("./config/db_alfred"));
+const schedule_1 = require("./schedule/schedule");
 // routes
 const user_1 = __importDefault(require("./routes/user"));
 const account_1 = __importDefault(require("./routes/account"));
@@ -38,6 +39,7 @@ class Server {
         this.app = express_1.default();
         this.config();
         this.routes();
+        this.scheduleCronJobs();
     }
     config() {
         this.app.set('port', process.env.PORT || 3000);
@@ -63,6 +65,9 @@ class Server {
                 }
             });
         });
+    }
+    scheduleCronJobs() {
+        schedule_1.scheduleCronJobsTransacctions();
     }
     start() {
         if (!db_1.default)
